@@ -104,6 +104,7 @@ class AuthController extends GetxController {
           "confirmationPassword": confirmPasswordController.text,
           "firstname": firstnameController.text,
           "lastname": lastnameController.text,
+          "role": "USER",
         });
         if (response.statusCode! >= 200 && response.statusCode! <= 299) {
           Get.snackbar(
