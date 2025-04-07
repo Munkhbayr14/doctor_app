@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:app/core/api/dio_client.dart';
 import 'package:app/core/utils/token_preference.dart';
 import 'package:app/pages/screen/layout/bottom_navigation_screen.dart';
+import 'package:app/pages/screen/profile/controller/profile_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,11 +38,14 @@ class AuthController extends GetxController {
             'password': passwordController.text
           },
         );
-        log("Response data: ${response.data}");
+
         if (response.statusCode! >= 200 && response.statusCode! <= 299) {
           String token = response.data['accessToken'];
-          log("toooookkkkkeeennn ===== > ${response.data['accessToken']}");
+          int userId = response.data['userId'];
           await saveToken(token);
+          log("login UserId=> ${userId}");
+          // await profileController.setUserId(userId);
+
           Get.snackbar(
             "Амжилттай",
             "${response.data['message']}",

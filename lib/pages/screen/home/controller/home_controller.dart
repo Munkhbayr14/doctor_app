@@ -17,15 +17,15 @@ class HomeController extends GetxController {
     getBanner();
   }
 
-  void getBanner() async {
+  Future<void> getBanner() async {
     try {
       var response = await dio.get(
         "banner/all",
         // options: Options(headers: {"Authorization": 'bearer $bearerToken'})
       );
-      // log(response.toString());
       if (response.statusCode! >= 200 && response.statusCode! <= 299) {
         var bannerModel = BannerModel.fromJson(response.data);
+
         bannerList.value = bannerModel.result;
       }
     } catch (e) {

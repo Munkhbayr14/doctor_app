@@ -12,7 +12,6 @@ class TokenPreference {
   }
 
   static Future setToken(String token) async {
-    log("sheeeerraa $token");
     await _preferences?.setString(_key, token);
   }
 

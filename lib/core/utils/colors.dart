@@ -26,6 +26,7 @@ class AppColors {
   static const error300 = Color(0xFFFF5C5C);
   static const error400 = Color(0xFFFF3B3B);
   static const error500 = Color(0xFFE53535);
+  static const logout = Color(0xFFEC4D3C);
   static const success100 = Color(0xFFE3FFF1);
   static const success200 = Color(0xFF56EBA0);
   static const success300 = Color(0xFF39D98A);

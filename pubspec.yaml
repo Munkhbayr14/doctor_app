@@ -25,6 +25,9 @@ dependencies:
   carousel_slider: ^5.0.0
   json_annotation: ^4.9.0
   dots_indicator: ^4.0.1
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -41,5 +44,21 @@ flutter:
   assets:
     - assets/
     - assets/img/bottom_gif/
+    - assets/img/avatar/
     - assets/img/icon/
     - assets/banner/
+
+
+  fonts:
+    - family: SystemIcons
+      fonts:
+        - asset: assets/svg/SystemIcons.ttf
+    - family: HealthIcons
+      fonts:
+        - asset: assets/svg/HealthIcons.ttf
+    - family: SeIcons
+      fonts:
+        - asset: assets/svg/SeIcons.ttf
+    - family: SliderIcons
+      fonts:
+        - asset: assets/svg/SliderIcons.ttf

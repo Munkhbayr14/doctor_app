@@ -14,7 +14,6 @@ class SplashController extends GetxController {
     await TokenPreference.init();
 
     var bearerToken = await TokenPreference.getToken();
-    log("token => $bearerToken");
 
     await Future.delayed(const Duration(milliseconds: 3000));
     if (bearerToken != null && bearerToken!.isNotEmpty) {
