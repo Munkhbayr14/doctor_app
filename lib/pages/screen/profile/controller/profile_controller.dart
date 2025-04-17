@@ -23,6 +23,7 @@ class ProfileController extends GetxController {
   Rx<File?> selectedImage = Rx<File?>(null);
   RxBool isUploading = false.obs;
   final picker = ImagePicker();
+  var isLoading = false.obs;
 
   void onInit() {
     bearerToken = TokenPreference.getToken()!;
@@ -38,17 +39,23 @@ class ProfileController extends GetxController {
   }
 
   Future<void> fetchProfileData() async {
-    var response = await dio.get(
-      "profile/${userId.value}",
-      options: Options(
-        headers: {"Authorization": "Bearer $bearerToken"},
-      ),
-    );
-    if (response.statusCode! >= 200 && response.statusCode! <= 299) {
-      var profileData = ProfileModel.fromJson(response.data);
-      profileModel.value = profileData.result;
-    } else {
-      print('Logout failed');
+    try {
+      isLoading.value = true;
+      var response = await dio.get(
+        "profile/${userId.value}",
+        options: Options(
+          headers: {"Authorization": "Bearer $bearerToken"},
+        ),
+      );
+      if (response.statusCode! >= 200 && response.statusCode! <= 299) {
+        var profileData = ProfileModel.fromJson(response.data);
+        profileModel.value = profileData.result;
+      } else {
+        print('Logout failed');
+      }
+    } catch (e) {
+    } finally {
+      isLoading.value = false;
     }
   }
 

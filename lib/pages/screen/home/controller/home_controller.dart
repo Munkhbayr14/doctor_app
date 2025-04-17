@@ -10,6 +10,8 @@ class HomeController extends GetxController {
   var bannerList = <Result>[].obs;
   var currentIndex = 0.obs;
   String bearerToken = "";
+  var isLoading = false.obs;
+
   @override
   void onInit() {
     bearerToken = TokenPreference.getToken()!;
@@ -19,17 +21,16 @@ class HomeController extends GetxController {
 
   Future<void> getBanner() async {
     try {
-      var response = await dio.get(
-        "banner/all",
-        // options: Options(headers: {"Authorization": 'bearer $bearerToken'})
-      );
+      isLoading.value = true;
+      var response = await dio.get("banner/all");
       if (response.statusCode! >= 200 && response.statusCode! <= 299) {
         var bannerModel = BannerModel.fromJson(response.data);
-
         bannerList.value = bannerModel.result;
       }
     } catch (e) {
       print("Error fetching banners: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 }

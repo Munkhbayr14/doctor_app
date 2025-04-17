@@ -33,6 +33,7 @@ class AppColors {
   static const success400 = Color(0xFF06C270);
   static const success500 = Color(0xFF05A660);
   static const textcolor = Color(0xFF6246E8);
+  static const BottomBar = Color(0xFFD9D9D9);
   static const serviceDefaultColor = Color(0xFFE6F5F8);
   static const textInputBackgroundColor = Color(0xFFF2F2F5);
 }

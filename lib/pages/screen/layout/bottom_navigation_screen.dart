@@ -58,18 +58,19 @@ class BottomNavigationScreen extends StatelessWidget {
                           bottomNavController.currentIndex.value == 0
                               ? Image.asset(
                                   'assets/img/bottom_gif/home.gif',
-                                  height: 20,
+                                  height: 25,
+                                  color: AppColors.textcolor,
                                 )
                               : const Icon(
                                   SystemIcons.home_1,
-                                  size: 16,
+                                  size: 18,
                                 ),
                           Text(
                             'Нүүр',
                             style: TextStyle(
                                 color:
                                     bottomNavController.currentIndex.value == 0
-                                        ? AppColors.primary400
+                                        ? AppColors.textcolor
                                         : AppColors.dark400),
                           )
                         ],
@@ -113,18 +114,19 @@ class BottomNavigationScreen extends StatelessWidget {
                           bottomNavController.currentIndex.value == 1
                               ? Image.asset(
                                   'assets/img/bottom_gif/category.gif',
-                                  height: 20,
+                                  height: 25,
+                                  color: AppColors.textcolor,
                                 )
                               : const Icon(
                                   SystemIcons.services,
-                                  size: 16,
+                                  size: 18,
                                 ),
                           Text(
                             'Ая',
                             style: TextStyle(
                                 color:
                                     bottomNavController.currentIndex.value == 1
-                                        ? AppColors.primary400
+                                        ? AppColors.textcolor
                                         : AppColors.dark400),
                           ),
                         ],

@@ -16,156 +16,183 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            await homeController.getBanner();
-            await profileController.fetchProfileData();
-          },
-          child: ListView(
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.only(right: 16, left: 16),
-            children: [
-              Obx(() => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor: Colors.white,
+        body: Obx(() {
+          return homeController.isLoading.value
+              ? Center(child: CircularProgressIndicator())
+              : SafeArea(
+                  child: Column(
                     children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder: (context) => ProfileScreen(),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Obx(() => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          builder: (context) => ProfileScreen(),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(20)),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.textcolor),
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          image: DecorationImage(
+                                            image: profileController
+                                                        .profileModel
+                                                        .value
+                                                        ?.avatarUrl
+                                                        ?.isNotEmpty ==
+                                                    true
+                                                ? NetworkImage(profileController
+                                                    .profileModel
+                                                    .value!
+                                                    .avatarUrl!)
+                                                : const AssetImage(
+                                                        'assets/img/avatar/Profile default.png')
+                                                    as ImageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.textcolor),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Color(0xFFF0EDFF)),
+                                      child: Text(
+                                        profileController.profileModel.value
+                                                ?.firstName ??
+                                            "No Name",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: size.height * 0.02,
+                                            color: Colors.grey[800]),
+                                      ),
+                                    )
+                                  ],
                                 ),
+                                IconButton(
+                                  onPressed: () =>
+                                      print("Notification clicked!"),
+                                  icon: Icon(Icons.notifications,
+                                      color: Colors.black87),
+                                )
+                              ],
+                            )),
+                      ),
+                      Expanded(
+                          child: RefreshIndicator(
+                        onRefresh: () async {
+                          await homeController.getBanner();
+                          await profileController.fetchProfileData();
+                        },
+                        child: ListView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(right: 16, left: 16),
+                          children: [
+                            SizedBox(height: 15),
+                            Obx(() {
+                              return Column(
+                                children: [
+                                  CarouselSlider.builder(
+                                    itemCount: homeController.bannerList.length,
+                                    options: CarouselOptions(
+                                      viewportFraction: 1,
+                                      autoPlay: true,
+                                      aspectRatio: 2.0,
+                                      enlargeCenterPage: true,
+                                      onPageChanged: (index, reason) {
+                                        homeController.currentIndex.value =
+                                            index;
+                                      },
+                                    ),
+                                    itemBuilder: (context, index, realIdx) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: NetworkImage(homeController
+                                              .bannerList[index].image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Obx(() => DotsIndicator(
+                                        dotsCount:
+                                            homeController.bannerList.length,
+                                        position: homeController
+                                            .currentIndex.value
+                                            .toDouble(),
+                                        decorator: DotsDecorator(
+                                          color: Color(0xFFD9D9D9),
+                                          activeColor: AppColors.textcolor,
+                                          size: const Size.square(8.0),
+                                          activeSize: const Size(8.0, 8.0),
+                                          activeShape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                          ),
+                                        ),
+                                      )),
+                                ],
                               );
-                            },
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColors.textcolor),
-                                borderRadius: BorderRadius.circular(50),
-                                image: DecorationImage(
-                                  image: profileController.profileModel.value
-                                              ?.avatarUrl?.isNotEmpty ==
-                                          true
-                                      ? NetworkImage(profileController
-                                          .profileModel.value!.avatarUrl!)
-                                      : const AssetImage(
-                                              'assets/img/avatar/Profile default.png')
-                                          as ImageProvider,
-                                  fit: BoxFit.cover,
-                                ),
+                            }),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Мэдээ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  Text(
+                                    'Бүгд',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: AppColors.textcolor),
-                                borderRadius: BorderRadius.circular(20),
-                                color: Color(0xFFF0EDFF)),
-                            child: Text(
-                              profileController.profileModel.value?.firstName ??
-                                  "No Name",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: size.height * 0.02,
-                                  color: Colors.grey[800]),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  InfoWidget(),
+                                  InfoWidget(),
+                                ],
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      IconButton(
-                        onPressed: () => print("Notification clicked!"),
-                        icon: Icon(Icons.notifications, color: Colors.black87),
-                      )
-                    ],
-                  )),
-              SizedBox(height: 10),
-              Obx(() {
-                if (homeController.bannerList.isEmpty) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                return Column(
-                  children: [
-                    CarouselSlider.builder(
-                      itemCount: homeController.bannerList.length,
-                      options: CarouselOptions(
-                        viewportFraction: 1,
-                        autoPlay: true,
-                        aspectRatio: 2.0,
-                        enlargeCenterPage: true,
-                        onPageChanged: (index, reason) {
-                          homeController.currentIndex.value = index;
-                        },
-                      ),
-                      itemBuilder: (context, index, realIdx) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                homeController.bannerList[index].image),
-                            fit: BoxFit.cover,
-                          ),
+                          ],
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Obx(() => DotsIndicator(
-                          dotsCount: homeController.bannerList.length,
-                          position:
-                              homeController.currentIndex.value.toDouble(),
-                          decorator: DotsDecorator(
-                            color: Color(0xFFD9D9D9),
-                            activeColor: AppColors.textcolor,
-                            size: const Size.square(8.0),
-                            activeSize: const Size(8.0, 8.0),
-                            activeShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                        )),
-                  ],
+                      )),
+                    ],
+                  ),
                 );
-              }),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Мэдээ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    Text(
-                      'Бүгд',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    InfoWidget(),
-                    InfoWidget(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+        }));
   }
 }
