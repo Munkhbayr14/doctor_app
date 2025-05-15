@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[100],
         body: Obx(() {
           return homeController.isLoading.value
               ? Center(child: CircularProgressIndicator())
@@ -160,33 +160,26 @@ class HomeScreen extends StatelessWidget {
                               );
                             }),
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
+                              padding: EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Мэдээ',
+                                    'Story',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18),
                                   ),
-                                  Text(
-                                    'Бүгд',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
                                 ],
                               ),
                             ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  InfoWidget(),
-                                  InfoWidget(),
-                                ],
-                              ),
+                            Column(
+                              children: [
+                                InfoWidget(),
+                              ],
                             ),
+                            SizedBox(height: 10),
                           ],
                         ),
                       )),

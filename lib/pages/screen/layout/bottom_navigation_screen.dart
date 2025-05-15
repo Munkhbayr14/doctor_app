@@ -15,7 +15,7 @@ class BottomNavigationScreen extends StatelessWidget {
       () => Scaffold(
         body:
             bottomNavController.screens[bottomNavController.currentIndex.value],
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Colors.white,
         bottomNavigationBar: Container(
           width: size.width,
           height: bottomNavBarHeight,

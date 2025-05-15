@@ -6,16 +6,24 @@ plugins {
 }
 
 android {
+        compileSdkVersion 35
+
+    defaultConfig {
+        applicationId "mn.church.selah"
+        minSdkVersion 21
+        targetSdkVersion 35
+    }
     namespace = "mn.church.selah"
-    compileSdk = 45
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+      compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+
     }
 
-    kotlinOptions {
+   kotlinOptions {
         jvmTarget = "17"
     }
 
@@ -33,6 +41,10 @@ android {
         }
     }
 }
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xlint:unchecked", "-Xlint:deprecation"]
+}
+
 
 flutter {
     source = "../.."

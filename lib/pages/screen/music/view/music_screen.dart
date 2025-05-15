@@ -1,15 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:app/core/utils/colors.dart';
 import 'package:app/pages/screen/music/controller/music_controller.dart';
 import 'package:app/pages/screen/music/view/music_widget.dart';
 import 'package:app/pages/screen/profile/controller/profile_controller.dart';
 import 'package:app/pages/screen/profile/view/profile_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class MusicScreen extends StatelessWidget {
   MusicScreen({super.key});
   final ProfileController profileController = Get.put(ProfileController());
   final MusicController musicController = Get.put(MusicController());
+  final Rx<String> searchQuery = ''.obs;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -90,7 +92,7 @@ class MusicScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: TextField(
                 onChanged: (value) {
-                  print("Searching: $value");
+                  searchQuery.value = value;
                 },
                 decoration: InputDecoration(
                   hintText: 'Хайх...',
@@ -114,12 +116,17 @@ class MusicScreen extends StatelessWidget {
             ),
             Expanded(
               child: Obx(() {
+                final filteredMusic = musicController.musicModel
+                    .where((music) => music.title
+                        .toLowerCase()
+                        .contains(searchQuery.value.toLowerCase()))
+                    .toList();
                 return RefreshIndicator(
                   onRefresh: () async {
                     await profileController.fetchProfileData();
                     await musicController.fetchMusicdata();
                   },
-                  child: musicController.musicModel.isEmpty
+                  child: filteredMusic.isEmpty
                       ? SingleChildScrollView(
                           physics: AlwaysScrollableScrollPhysics(),
                           child: SizedBox(
@@ -132,9 +139,9 @@ class MusicScreen extends StatelessWidget {
                       : ListView.builder(
                           physics: AlwaysScrollableScrollPhysics(),
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: musicController.musicModel.length,
+                          itemCount: filteredMusic.length,
                           itemBuilder: (context, index) {
-                            final music = musicController.musicModel[index];
+                            final music = filteredMusic[index];
                             return MusicWidget(music: music);
                           },
                         ),
